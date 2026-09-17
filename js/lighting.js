@@ -30,7 +30,7 @@ const Lights = function( SDF ) {
         __attenuation: param_wrap( attenuation, float_var_gen( 1 ) ),
       }
 
-      pos = typeof __pos === 'number' ? Vec3( __pos ) : __pos
+      var pos = typeof __pos === 'number' ? Vec3( __pos ) : __pos
 
       const __varpos = param_wrap( 
         pos, 

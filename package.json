@@ -63,5 +63,9 @@
       "glslify"
     ]
   },
-  "homepage": "https://github.com/charlieroberts/marching#readme"
+  "homepage": "https://github.com/charlieroberts/marching#readme",
+  "allowScripts": {
+    "@serialport/bindings-cpp@10.8.0": true,
+    "fsevents@1.2.13": true
+  }
 }

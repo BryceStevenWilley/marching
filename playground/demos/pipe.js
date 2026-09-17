@@ -2,14 +2,11 @@ module.exports = `Marching.lighting.mode = 'orenn'
  
 march(
   SmoothUnion(
-    rot = Rotation( 
-      pipe = Pipe(
+    rot = Pipe(
         Box(),
         sphere = Sphere(2.5, null, Material.blue),
         .5
-      ),
-      Vec3(1,.5,.5)
-    ),
+    ).rotate(0, 1,.5,.5),
     Plane( Vec3(0,1,.75), 2.25 ),
     .125
   )
@@ -24,6 +21,6 @@ march(
  
 callbacks.push( time => {
   pipe.c = .8 + Math.abs(Math.sin(time/2)) / 4
-  rot.angle = time
+  rot.rotate(time)
   sphere.radius = 2 + Math.abs( Math.sin(time/4))
 })`

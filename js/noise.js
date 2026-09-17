@@ -4,7 +4,7 @@ const { param_wrap, MaterialID } = require( './utils.js' )
 const { Var, float_var_gen, vec2_var_gen, vec3_var_gen, vec4_var_gen } = require( './var.js' )
 
 const getNoise = function( SDF ) {
-Noise = function( strength=.25, bias=1, timeMod=1 ) {
+const Noise = function( strength=.25, bias=1, timeMod=1 ) {
   const op = Object.create( Noise.prototype )
   op.type = 'string'
   op.isGen = true

@@ -18,9 +18,14 @@ const Var = function( value, fixedName = null, __type ) {
 	v.varName = fixedName !== null ? fixedName : 'var' + VarAlloc.alloc()
   v.value = value
   v.type = v.value.type
-  if( v.type === undefined ) v.type = __type || 'float' 
+  if( v.type === undefined ) {
+    v.type = __type || 'float' 
+  }
+  // Some things (floats) aren't objects.
+  if (Object.keys(value).length > 0) {
+    value.var = v
+  }
 
-  value.var = v
 
   if( v.type !== 'float' && v.type !== 'int' ) {
     Object.defineProperties( v, {
