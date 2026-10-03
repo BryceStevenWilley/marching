@@ -33099,7 +33099,7 @@ window.onload = function() {
           const workerBlob = new Blob([ values[1] ])
           const workerURL  = window.URL.createObjectURL( workerBlob )
 
-          Marching.Scene.prototype.gif = function( width=600, height=335, length=60, quality=5, delay=17, filename='marching.gif' ) {
+          Marching.__scene.prototype.gif = function( width=600, height=335, length=60, quality=5, delay=17, filename='marching.gif' ) {
             const gif = new GIF({
               quality, width, height,
               workers:2,

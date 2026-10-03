@@ -7,7 +7,7 @@ const SDF = {
   distanceDeforms:  require( './distanceDeformations.js' ),
   __domainOps:      require( './domainOperations.js' ),
   __noise:          require( './noise.js' ),
-  __scene:          require( './scene.js' ),
+  __getScene:       require( './scene.js' ),
   __lighting:       require( './lighting.js' ),
   __materials:      require( './material.js' ),
   __textures:       require( './texture.js' ),
@@ -84,12 +84,12 @@ const SDF = {
 
   init( canvas, shouldInit = true ) {
     this.primitives = this.__primitives( this )
-    this.Scene      = this.__scene( this )
+    this.Scene      = this.__getScene( this )
     this.domainOps  = this.__domainOps( this )
     this.noise     = this.__noise( this )
     this.export( this )
 
-    this.canvas = canvas//document.createElement('canvas')
+    this.canvas = canvas
 
     this.lighting   = this.__lighting( this )
     this.Light = this.lighting.light
@@ -137,7 +137,7 @@ const SDF = {
     setTimeout( ()=> this.render( time ), 0 )
   },
 
-  generateSDF( __scene ) {
+  generateSDF( theScene ) {
     let scene = { preface:'' }
 
     /* if there is more than one object in our scene, chain pairs of objects
@@ -149,7 +149,7 @@ const SDF = {
        use that object as the entire scene.
      */
 
-    let objs = __scene.objs
+    let objs = theScene.objs
     if( objs.length > 1 ) {
       // reduce objects to nested Unions
       scene.output = objs.reduce( ( current, next ) => this.Union( current, next ) )
@@ -180,12 +180,12 @@ const SDF = {
     const sceneRendering = scene.output.emit()
 
     let pp = ''
-    for( let processor of __scene.postprocessing ) {
+    for( let processor of theScene.postprocessing ) {
       pp += processor.emit()
       variablesDeclaration += processor.emit_decl()
     }
     
-    this.postprocessing = __scene.postprocessing
+    this.postprocessing = theScene.postprocessing
 
     return [ variablesDeclaration, sceneRendering, pp ]
   },
@@ -211,6 +211,19 @@ const SDF = {
 
 		return shader
 	},
+  deinit() {
+    if( this.fs !== null && this.program !== null ) {
+      this.gl.detachShader( this.program, this.fs );
+      this.gl.detachShader( this.program, this.vs );
+      this.gl.deleteShader(this.vs);
+      this.gl.deleteShader(this.fs);
+      this.gl.deleteProgram(this.program);
+    }
+    this.fs = null;
+    this.vs = null;
+    this.program = null;
+    this.gl = null;
+  },
 
   createProgram( vs_source, fs_source ) {
     const gl = this.gl
